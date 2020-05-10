@@ -1,5 +1,6 @@
 #include "TimerOne.h" // используем библиотеку Timer1
 #include <math.h>
+#include <avr/power.h>// подключаем библиотеку Low-Power
 
 #define WindSensorPin (2) // ввод анемометра
 #define WindVanePin (A4) // ввод флюгера
@@ -20,8 +21,10 @@ float WindSpeed; // скорость ветра
 
 
 void setup() {
+	clock_prescale_set(clock_div_16)//уменьшаем тактовую частоту процессора для уменьшения энергопотребления
 
 	LastValue = 0;
+	
 
 	MainTimer = false;
 

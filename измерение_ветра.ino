@@ -1,5 +1,6 @@
 #include "TimerOne.h" // используем библиотеку Timer1
 #include <math.h>
+#include <avr/power.h>// подключаем библиотеку Low-Power
 
 #define WindSensorPin (2) // ввод анемометра
 #define WindVanePin (A4) // ввод флюгера
@@ -20,8 +21,10 @@ float WindSpeed; // скорость ветра
 
 
 void setup() {
+	clock_prescale_set(clock_div_16)//уменьшаем тактовую частоту процессора для уменьшения энергопотребления
 
 	LastValue = 0;
+	
 
 	MainTimer = false;
 
@@ -59,9 +62,9 @@ void loop() {
 	
 		char c = Serial.read();
 		if (c == '\n') { // отслеживаем конец строки 
-			Serial.print("Скорость ветра: ");Serial.print(WindSpeed); Serial.print("м/с\n");// пересылаем данные по скорости ветра
-			Serial.print("Направление ветра: ");defDirection(RelDirection);Serial.print("\n");// пересылаем данные по направлению ветра
-			Serial.print("Сила ветра: "); BoufortStrength(WindSpeed); // оценка силы ветра
+			Serial.print(WindSpeed); Serial.print("м/с");Serial.print("|");// пересылаем данные по скорости ветра
+			defDirection(RelDirection);Serial.print("|");// пересылаем данные по направлению ветра
+			BoufortStrength(WindSpeed); // оценка силы ветра
 			input_string = "";// сбрасываем строку ввода
 		}
 		else
